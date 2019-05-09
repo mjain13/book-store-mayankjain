@@ -48,6 +48,11 @@ class AppRouter extends Component{
                                             exact ={true}
                                             path={'/Edit/:book_id'}       
                                         />
+                                        <Route 
+                                            component={List}
+                                            exact ={true}
+                                            path={'/List/:book_id'}       
+                                        />
                                     </Switch>
                                 </div>
                             </div>

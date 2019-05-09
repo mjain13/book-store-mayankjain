@@ -89,13 +89,13 @@ class Add extends Component {
   render() {
     let { book_id, title, description, author, busy } = this.state;
     return (
-      <form className = {'row-group'}
+      <form
         onSubmit={this.onAdd.bind(this)}>
         <div
-          className={'row form-group shadow-sm field-center'}>
-
+          className={'form-group shadow-sm field-center col-md-9'}>
+          <br/>
           <div
-            className={'form-group col-md-10 '}>
+            className={'form-group '}>
             <label for="formGroupExampleInput font-weight-bold">Book Title:</label>
             <input
               ref={'title'}
@@ -103,46 +103,45 @@ class Add extends Component {
               autoFocus
               value={title}
               onChange={this.onChangeForm.bind(this, 'title')}
-              className={'form-control'}
+              className={'form-control shadow'}
               type={'text'}
               placeholder={'Book Title ..'}
             />
           </div>
-
           <div
-            className={'form-group col-md-10'}>
+            className={'form-group'}>
             <label for="formGroupExampleInput">Author Name:</label>
             <input
               disabled={busy}
               onChange={this.onChangeForm.bind(this, 'author')}
               value={author}
-              className={'form-control'}
+              className={'form-control shadow'}
               type={'text'}
               placeholder={'Book Author ..'}
             />
           </div>
           <div
-            className={'form-group col-md-10'}>
+            className={'form-group '}>
             <textarea
               disabled={busy}
               onChange={this.onChangeForm.bind(this, 'description')}
               value={description}
-              className={'form-control'}
+              className={'form-control shadow'}
               type={'number'}
-              rows={10}
+              rows={9}
               placeholder={'Book Description ..'}
             />
           </div>
           <div
-            className={'form-group col-md-10'}>
+            className={'form-group'}>
             <button
               disabled={busy}
-              className={'btn btn-primary btn-block'}
+              className={'btn btn-primary btn-block shadow'}
               type={'submit'}>
               {book_id ? 'Update' : 'Add'}
             </button>
           </div>
-
+          <br/>
         </div>
       </form>
     );

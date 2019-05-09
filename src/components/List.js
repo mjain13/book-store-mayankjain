@@ -5,6 +5,9 @@ import { get, del,up } from '../action/books/';
 import ajax from '../utils/ajax';
 
 import read from '../image/ReadBook.png';
+import ed1 from '../image/edit.png';
+import open from '../image/open-book1.png';
+import del1 from '../image/delete.png';
 class List extends Component {
   constructor(props) {
     super(props);
@@ -14,18 +17,14 @@ class List extends Component {
     };
   };
   componentDidMount() {
-    
-    ajax({
+      ajax({
       url: '/Books',
       type: 'GET'
     }).then(({ d }) => {
       this.setState({ books: d })
     })
   };
-  // onUp(ind){
-  //   this.props.up(ind);
-  // };
-  onDel(ind){
+   onDel(ind){
     // let { books.book_id } = this.state.books;
       this.setState({
             busy: true
@@ -37,8 +36,7 @@ class List extends Component {
           type: 'DELETE',
           data:{ ind }
         }).then(({ s })=> {
-          if (s === 's') {
-            
+          if (s === 's') {           
           }
           this.setState({
             busy: false,
@@ -48,15 +46,21 @@ class List extends Component {
         });
       }
   }
-
-  componentDidUpdate() {
-    // ajax({
-    //   url: '/Books',
-    // }).then(({ d }) => {
-    //   this.setState({ books: d })
-    // })
+  ondel1(e){
+    e.preventDefault();
+    let { book_id } = this.props;
+    ajax({
+      url: '/Books',
+      type: 'DELETE',
+      postUrl:`&book_id=${book_id}`
+    }).then(({ s })=> {
+      if (s === 's') {
+        this.setState({
+        });
+      }
+      this.props.history.push(`/`);
+    });
   }
-
   render() {
     console.log(this.props);
     let books = this.state.books;
@@ -67,14 +71,11 @@ class List extends Component {
           className={'row'}>
           {books && books.map((books, k) =>
             <div
-              className={`col-md-6 mb-3 px-2`}key={k} >
-              
+              className={`col-md-6 mb-3 px-2`}key={k} >             
               <div
                 className={'card shadow'}>
-                
                 <div
                   className={'card-body .bg-gradient-primary'}>
-                  
                   <h5
                     className={'card-header text-center'}>
                     <img src={read} class="navbar-brand" alt={read}></img>
@@ -91,20 +92,35 @@ class List extends Component {
                   <Link
                     // onClick={this.onUp.bind(this, books.book_id)}
                     to={`/Edit/${books.book_id}`}
-                    className={'card-link'}>
-                    {'Edit'}
+                    title={'Edit Book'}
+                    className={'card-link '}>
+                    <img src={ed1} class="navbar-brand" alt={ed1}></img>
                   </Link>
-                  <button
-                    onClick={this.onDel.bind(this, books.book_id)}
-                    to={`Delete/${books.book_id}`}
-                    className={'card-link text-danger'}>
-                    {'Delete'}
-                  </button>
+
                   {/* <button
-                    to={`View/${books.book_id}`}
-                    className={'card-link float-right'}>
-                    {'View'}
+                    onClick={this.onDel.bind(this, books.book_id)}
+                    // to={`${books.book_id}`}
+                    className={'card-link text-danger float-center'}>
+                    <img src={del1} class="navbar-brand" alt={del1}></img>
+                    {'Delete'}
                   </button> */}
+                  
+                  <Link
+                      to={`/List/${books.book_id}`}>
+                    <div 
+                      onClick={this.onDel.bind(this, books.book_id)}
+                      title={'Delete Book'}
+                      className={'card-link center d-inline-block'}>
+                        <img src={del1} class="navbar-brand" alt={del1}></img>
+                    </div>
+                  </Link>
+                  <Link
+                    to={`View/${books.book_id}`}
+                    title={'View Book'}
+                    className={'card-link float-right'}>
+                    <img src={open} class="navbar-brand" alt={open}></img>
+                    {/* {'View'} */}
+                  </Link>
                 </div>
               </div>
             </div>
