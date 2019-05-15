@@ -34,7 +34,7 @@ class AppRouter extends Component{
                                             path={'/Add'}
                                         />
                                         <Route 
-                                            component={Add}
+                                            component={List}
                                             exact ={true}
                                             path={'/'}       
                                         />

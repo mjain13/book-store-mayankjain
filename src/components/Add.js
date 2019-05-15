@@ -80,7 +80,7 @@ class Add extends Component {
         this.setState({
           busy: false
         });
-        this.props.history.push(`/List`);
+        this.props.history.push(`/Add`);
       });
     }
     ReactDOM.findDOMNode(this.refs.title).focus();
