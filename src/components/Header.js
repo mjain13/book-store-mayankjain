@@ -25,6 +25,11 @@ class Header extends Component{
                                 {'Book List'}
                             </NavLink>
                         </li >&emsp;
+                        {/* <li className={'nav-item'}>
+                            <NavLink to={'/Details'} className="nav-link" href="#" activeStyle ={{color:'green'}}>
+                                {'Book Detail'}
+                            </NavLink>
+                        </li >&emsp; */}
                     </ul>
                 </div>
             </nav>

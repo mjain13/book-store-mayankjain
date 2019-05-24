@@ -1,14 +1,16 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
-import { get, del, up } from '../action/books/';
 import ajax from '../utils/ajax';
-import { Modal } from 'react-bootstrap';
 
 import read from '../image/ReadBook.png';
 import ed1 from '../image/edit.png';
 import open from '../image/open-book1.png';
 import del1 from '../image/delete.png';
+// import readBook from '../image/ReadBook.png';
+
+// import Model from './Model';
+import SucessMessage from './SucessMessage';
 
 class List extends Component {
   constructor(props) {
@@ -16,34 +18,32 @@ class List extends Component {
     this.state = {
       books: [],                                        //For Books
       book_id: this.props.match.params.book_id,        // For Update 
-      show: false,                                   //For Model
-      obj: [],                                       //For Model
+      obj: [],  
+      message:[],
+      show1: false
     };
-    this.close = this.close.bind(this);
-    this.show = this.show.bind(this);
+    // this.close = this.close.bind(this);
+    // this.show = this.show.bind(this);
     // this.onSearch = this.onSearch.bind(this);
   };
 
                 // ---------------------------For Model---------------------------
-  show(ind1) {
-    this.setState({
-      show: true, obj: ind1
-    })
-  };
-  close() {
-    this.setState({
-      show: false
-    });
-  };
-  onShow(ind1) {
-    this.show(ind1);
-  }
+  // show(ind1) {
+  //   this.setState({
+  //     show: true, 
+  //     obj: ind1
+  //   })
+  // };
+
+  // onShow(ind1) {
+  //   this.show(ind1);
+  // }
 
               // ------------------------------ Search ---------------------------------
   onSearch(e) {
     let self = this;
     let serachValue = self.refs.textBox.value;
-    if (serachValue != "") {
+    if (serachValue !== "") {
       let filteredBooks = this.state.books.filter(function (book) {
         let title = book.title, serachValue = self.refs.textBox.value;
         if (!title.indexOf(serachValue)) {
@@ -71,50 +71,66 @@ class List extends Component {
       this.setState({ books: d })
     })
   };
+  // shouldComponentUpdate(newProp){
+  //   return true;
+  // }
+
 
               // ------------------------------ Delete Book --------------------------
   onDel(ind) {
     this.setState({
       busy: true
     });
-    if (ind) {
-      ajax({
-        url: '/Books',
-        postUrl: `?book_id=${ind}`,
-        type: 'DELETE',
-        data: { ind }
-      }).then(({ s }) => {
+    let Confirmation = window.confirm("Are you sure..You want to Delete the Book..");
+    if(Confirmation===true){
+      if (ind) {
         ajax({
           url: '/Books',
-          type: 'GET'
-        }).then(({ d }) => {
-          this.setState({ books: d })
+          postUrl: `?book_id=${ind}`,
+          type: 'DELETE',
+          data: { ind }
+        }).then(({m})=>{
+          this.setState({ message: m, show1: !this.state.show1 })
         })
-      });
+        // ajax({
+        //   url: '/Books',
+        //   type: 'GET'
+        // })
+        // .then(({ d }) => {
+        //   this.setState({ books: d })
+        // })
+        // this.componentDidMount();
+      }
+      this.componentDidMount();
     }
   }
   render() {
     // let ser = this.state.ser; 
     console.log(this.props);
     let books = this.state.books;
+    let m = this.state.message;
     console.log(books)
     return (
       <Fragment>
+        
         {/* -------------------- Search Bar --------------------- */}
         <form class="form-inline col-md-10">
-          <input class="form-control mr-sm-2 col-md-5" type="search" placeholder="Search By Author..." aria-label="Search"
+          <input class="form-control mr-sm-2 col-md-5" type="search" 
+            placeholder="Search By Title..." aria-label="Search"
             ref="textBox" />
           <button class="btn btn-outline-success my-2 my-sm-0 col-md-3" type="submit"
-            onClick={(e) => { e.preventDefault(); this.onSearch(e) }}
-          >Search</button>
+            onClick={(e) => { e.preventDefault(); this.onSearch(e) }}>
+            {!books ? 'remove' : 'Search'}
+            </button>
         </form><br />
         <div className={'row'}>
           {/* ---------------  Loader --------------------------        */}
-          {books && !books.length && <div className="text-center" >
+          {books && !books.length && <div className="d-flex justify-content-center" >
             <div class="spinner-border" role="status">
               <span class="sr-only">Loading...</span>
             </div>
           </div>}
+
           {books && books.map((books, k) =>
             <div
               className={`col-md-6 mb-3 px-2`} key={k} >
@@ -129,11 +145,12 @@ class List extends Component {
                   <h6 className={'card-body card-subtitle mb-2 text-muted text-center'}>
                     {`By `}<strong>{books.author}</strong>
                   </h6>
-                  <div>
+                  <div >
                     <p className={'card-text border-bottom mb-3 pb-2'}>
                       {books.description}
                     </p>
                   </div>
+                  <div className={'text-center'}>
                   <Link
                     to={`/Edit/${books.book_id}`}
                     title={'Edit Book'}
@@ -149,36 +166,43 @@ class List extends Component {
                       <img src={del1} className="navbar-brand" alt={del1}></img>
                     </div>
                   </Link>
-                  <Link>
+                  {/* <Link>
                     <div
                       onClick={this.onShow.bind(this, books)}
                       title={'Open Book'}
                       className={'card-link center d-inline-block'}>
                       <img src={open} className="navbar-brand" alt={open}></img>
                     </div>
+                  </Link> */}
+                  <Link
+                      to={`/Details/${books.book_id}`}
+                      title={'View'}
+                      className={'card-link center d-inline-block'}>
+                      <img src={open} className="navbar-brand" alt={open}></img>
                   </Link>
-                </div>
+
+                  </div>
+                  </div>
               </div>
             </div>
           )}
         </div>
+                {/* ----------------- Modal ---------------- */}
 
-        {/* ----------------- Modal ---------------- */}
-        
-        <form className={"form-group shadow p-3 mb-5 bg-light rounded"} >
-          <Modal show={this.state.show} onHide={this.close}>
-            <Modal.Header closeButton className="bg-primary">
-              <Modal.Title>Title: {this.state.obj.title}</Modal.Title>
-            </Modal.Header>
-            {this.state.obj != null ?
-              <Modal.Body>{this.state.obj.description}<br /><br /><div className={"text-right"}>
-                By :{this.state.obj.author} </div>
-              </Modal.Body> : 'No data'}
-            <Modal.Footer className="bg-secondary">
-              <button className={"btn btn-link-green"} onClick={this.close}><h6>Close</h6></button>
-            </Modal.Footer >
-          </Modal>
-        </form>
+        {/* <Model data={this.state.obj} show={this.state.show} onToggle={()=> {
+          let {show} = this.state;
+          this.setState({
+            show: !show
+          });
+        }} /> */}
+
+        <SucessMessage m={m[0]} show1={this.state.show1} onToggle={()=> {
+          let {show1} = this.state;
+          this.setState({
+            show1: !show1
+          });
+        }}  />
+
       </Fragment>
     );
   }
@@ -186,12 +210,8 @@ class List extends Component {
 
 export default connect((state) => {
   return {
-    books: state.books
+    books: state.books,
+    message: state.message
   }
-},
-  {
-    get,
-    del,
-    up
-  }
+}
 )(List);

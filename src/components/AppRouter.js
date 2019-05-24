@@ -8,7 +8,7 @@ import history from '../utils/history';
 import List from '../components/List';
 import Add from '../components/Add';
 import Header from '../components/Header';
-// import Details from './Details';
+import Details from './Details';
 
 class AppRouter extends Component{
     render(){
@@ -41,17 +41,17 @@ class AppRouter extends Component{
                                         <Route 
                                             component={Add}
                                             exact ={true}
-                                            path={'/Details'}       
-                                        />
-                                        <Route 
-                                            component={Add}
-                                            exact ={true}
                                             path={'/Edit/:book_id'}       
                                         />
                                         <Route 
                                             component={List}
                                             exact ={true}
                                             path={'/List/:book_id'}       
+                                        />
+                                        <Route 
+                                            component={Details}
+                                            exact ={true}
+                                            path={'/Details/:book_id'}
                                         />
                                     </Switch>
                                 </div>
