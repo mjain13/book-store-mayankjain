@@ -1,6 +1,4 @@
 import $ from 'jquery';
-import SucessMessage from '../components/SucessMessage';
-import React,{Component} from 'react';
 const BASE_URL = `https://books-by-suyashkale.herokuapp.com/APIs`;
 const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNiIsImlhdCI6MTU1NjUyOTg2N30.o-bB1kPspMVeEq96sPcgbhGzNCW7TeZJxSi4-VzITBc';
 export default ({ type, contentType, dataType, url, data, postUrl }) => {
